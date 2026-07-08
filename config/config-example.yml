@@ -1,0 +1,23 @@
+dashboard:
+  host: 127.0.0.1
+  port: 5000
+  heartbeat_interval: 30  # seconds between backend heartbeat pings
+
+aggregation:
+  window: 60 # seconds
+
+logging:
+  file: "sentinel.log"  # logged to the "logs" folder
+
+database:
+  path: "data/sentinel.db"
+
+model:
+  path: models/mymodel.pkl
+  contamination: 0.05  # used during training and won't affect existing models
+
+  # scores are negative for anomalies an dpositive for normal traffic. 0 is the
+  # boundary. Set this to a value below zero to require more confidence before
+  # alerting
+  # btw you can check your score range in system status to see your normal traffic
+  alert_threshold: -0.10

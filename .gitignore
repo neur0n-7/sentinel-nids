@@ -1,0 +1,6 @@
+.venv
+logs/*.log
+src/__pycache__
+data/*.db
+models/*.pkl
+config/config.yml

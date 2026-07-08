@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sentinel</title>
+  <link rel="icon" type="image/png" href="/static/img/darkLogo.png" id="favicon">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <img src="/static/img/darkLogo.png" alt="Sentinel Logo" class="logo-img" id="sidebar-logo">
+      <div class="logo-text">
+        <div class="wordmark">SENTINEL</div>
+        <div class="sub">Network Intrusion Detection</div>
+      </div>
+    </div>
+    <nav>
+      <a href="#" data-section="overview">Overview</a>
+      <a href="#" data-section="status">System Status</a>
+      <a href="#" data-section="alerts">Alerts</a>
+      <a href="#" data-section="monitor">Monitor</a>
+      <a href="#" data-section="graphs">Graphs</a>
+      <a href="#" data-section="logs">Logs</a>
+    </nav>
+    <div class="sidebar-footer">
+      <button class="theme-toggle" id="theme-toggle" title="Toggle light/dark theme">
+        <span class="theme-icon-dark">&#9789;</span>
+        <span class="theme-icon-light">&#9728;</span>
+        <span id="theme-label">Dark</span>
+      </button>
+      <a href="https://github.com/neur0n-7/sentinel-nids" target="_blank" rel="noopener" class="github-link">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.009-.868-.013-1.703-2.782.604-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0 1 12 6.836a9.59 9.59 0 0 1 2.504.337c1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.202 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.741 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg>
+        <span>neur0n-7</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <div class="main">
+
+    <!-- Status banner -->
+    <div id="banner" class="banner ok">
+      <div class="banner-dot"></div>
+      <span class="banner-msg">Initializing…</span>
+    </div>
+
+    <!-- Overview -->
+    <section data-section="overview">
+      <div class="page-header">
+        <h1>Overview</h1>
+        <p>Live summary of network monitoring activity</p>
+      </div>
+      <div class="content">
+        <div class="cards">
+          <div class="card">
+            <div class="card-label">Total Alerts</div>
+            <div class="card-value red" id="ov-alerts">-</div>
+          </div>
+          <div class="card">
+            <div class="card-label">Windows Captured</div>
+            <div class="card-value" id="ov-windows">-</div>
+          </div>
+          <div class="card">
+            <div class="card-label">Last Window</div>
+            <div class="card-value small" id="ov-last">-</div>
+          </div>
+          <div class="card">
+            <div class="card-label">Model</div>
+            <div class="card-value" id="ov-model">-</div>
+          </div>
+          <div class="card">
+            <div class="card-label">Backend</div>
+            <div class="card-value" id="ov-backend">-</div>
+            <div class="card-sub" id="ov-uptime"></div>
+          </div>
+        </div>
+        <div class="chart-wrap">
+          <div class="chart-title-row">
+            <div class="chart-title">Packets per Window</div>
+            <div class="chart-nav">
+              <button class="btn" id="spark-prev">&#8592; Older</button>
+              <span class="chart-range" id="spark-range">-</span>
+              <button class="btn" id="spark-next">Newer &#8594;</button>
+            </div>
+          </div>
+          <canvas id="spark-chart" height="70"></canvas>
+        </div>
+        <div class="section-label">Top Talkers (recent windows)</div>
+        <div class="talkers-grid">
+          <div class="talkers-panel">
+            <div class="talkers-title">Top Sources</div>
+            <table class="mini-table"><tbody id="tt-sources"></tbody></table>
+          </div>
+          <div class="talkers-panel">
+            <div class="talkers-title">Top Destinations</div>
+            <table class="mini-table"><tbody id="tt-destinations"></tbody></table>
+          </div>
+          <div class="talkers-panel">
+            <div class="talkers-title">Top Ports</div>
+            <table class="mini-table"><tbody id="tt-ports"></tbody></table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- System Status -->
+    <section data-section="status">
+      <div class="page-header">
+        <h1>System Status</h1>
+        <p>Configuration and runtime state</p>
+      </div>
+      <div class="content">
+        <div class="status-grid">
+          <div class="status-item">
+            <div class="status-label">Model</div>
+            <div class="status-value" id="sys-model-status">-</div>
+          </div>
+          <div class="status-item">
+            <div class="status-label">Model Path</div>
+            <div class="status-value" id="sys-model-path">-</div>
+          </div>
+          <div class="status-item">
+            <div class="status-label">Window Size</div>
+            <div class="status-value" id="sys-window">-</div>
+          </div>
+          <div class="status-item">
+            <div class="status-label">Contamination</div>
+            <div class="status-value" id="sys-contamination">-</div>
+          </div>
+          <div class="status-item">
+            <div class="status-label">Database</div>
+            <div class="status-value" id="sys-db">-</div>
+          </div>
+          <div class="status-item">
+            <div class="status-label">Monitor Rows</div>
+            <div class="status-value" id="sys-monitor-rows">-</div>
+          </div>
+          <div class="status-item">
+            <div class="status-label">Alert Threshold</div>
+            <div class="status-value threshold-edit">
+              <input type="number" step="0.01" id="threshold-input" class="threshold-input">
+              <button class="btn" id="threshold-save">Save</button>
+              <span id="threshold-save-msg" class="threshold-msg"></span>
+            </div>
+          </div>
+          <div class="status-item">
+            <div class="status-label">Score Range (last 50 windows)</div>
+            <div class="status-value" id="sys-score-range">-</div>
+          </div>
+          <div class="status-item wide">
+            <div class="status-label">Training Profiles</div>
+            <div class="status-value" id="sys-profiles">-</div>
+          </div>
+          <div class="status-item wide">
+            <div class="status-label">Backend Health (last 24h)</div>
+            <div class="health-strip" id="health-strip"></div>
+          </div>
+        </div>
+        <div class="section-label" style="margin-top:1.25rem">Models</div>
+        <div class="model-list" id="model-list"></div>
+      </div>
+    </section>
+
+    <!-- Alerts -->
+    <section data-section="alerts">
+      <div class="page-header">
+        <div class="page-header-row">
+          <div>
+            <h1>Alerts</h1>
+            <p>Anomaly detections- click a row to expand all features. Negative scores indicate an anomaly. Positive scores indicate normal behavior.</p>
+          </div>
+          <button class="btn" id="notif-toggle">Enable notifications</button>
+        </div>
+      </div>
+      <div class="content">
+        <div class="chart-wrap">
+          <div class="chart-title-row">
+            <div class="chart-title">Anomaly Score Over Time</div>
+            <div class="chart-nav">
+              <button class="btn" id="score-prev">&#8592; Older</button>
+              <span class="chart-range" id="score-range">-</span>
+              <button class="btn" id="score-next">Newer &#8594;</button>
+            </div>
+          </div>
+          <canvas id="score-chart" height="90"></canvas>
+        </div>
+        <div class="chart-wrap">
+          <div class="chart-title">Score Distribution (threshold in red)</div>
+          <canvas id="hist-chart" height="70"></canvas>
+        </div>
+        <div class="section-label">Recent Alerts</div>
+        <div class="filter-bar">
+          <label>From <input type="datetime-local" id="alert-start"></label>
+          <label>To <input type="datetime-local" id="alert-end"></label>
+          <label>Verdict
+            <select id="alert-label-filter">
+              <option value="">All</option>
+              <option value="tp">Real Threat</option>
+              <option value="fp">False Alarm</option>
+            </select>
+          </label>
+          <button class="btn" id="alert-filter-apply">Apply</button>
+          <button class="btn" id="alert-filter-clear">Clear</button>
+          <a class="btn" id="alert-export" href="#">Export CSV</a>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Time</th>
+                <th>Score</th>
+                <th>Flows</th>
+                <th>Packets</th>
+                <th>Bytes</th>
+                <th>Reviewed</th>
+                <th>Verdict</th>
+              </tr>
+            </thead>
+            <tbody id="alerts-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Monitor -->
+    <section data-section="monitor">
+      <div class="page-header">
+        <h1>Monitor</h1>
+        <p>Raw capture windows from the live monitor</p>
+      </div>
+      <div class="content">
+        <div class="filter-bar">
+          <label>From <input type="datetime-local" id="mon-start"></label>
+          <label>To <input type="datetime-local" id="mon-end"></label>
+          <button class="btn" id="mon-filter-apply">Apply</button>
+          <button class="btn" id="mon-filter-clear">Clear</button>
+          <a class="btn" id="mon-export" href="#">Export CSV</a>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Time</th>
+                <th>Flows</th>
+                <th>Packets</th>
+                <th>Bytes</th>
+                <th>Avg Pkt/Flow</th>
+                <th>Avg B/Flow</th>
+                <th>Dsts</th>
+                <th>Ports</th>
+                <th>Score</th>
+              </tr>
+            </thead>
+            <tbody id="monitor-body"></tbody>
+          </table>
+        </div>
+        <div class="pagination">
+          <button class="btn" id="mon-prev">&#8592; Prev</button>
+          <span class="page-info" id="mon-page-info">-</span>
+          <button class="btn" id="mon-next">Next &#8594;</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Graphs -->
+    <section data-section="graphs">
+      <div class="page-header">
+        <h1>Graphs</h1>
+        <p>Additional traffic metrics over time</p>
+      </div>
+      <div class="content">
+        <div class="chart-nav-bar">
+          <button class="btn" id="graphs-prev">&#8592; Older</button>
+          <span class="chart-range" id="graphs-range">-</span>
+          <button class="btn" id="graphs-next">Newer &#8594;</button>
+        </div>
+        <div class="graphs-grid">
+          <div class="chart-wrap">
+            <div class="chart-title">Total Bytes per Window</div>
+            <div class="graph-canvas"><canvas id="g-bytes-chart"></canvas></div>
+          </div>
+          <div class="chart-wrap">
+            <div class="chart-title">Active Flows per Window</div>
+            <div class="graph-canvas"><canvas id="g-flows-chart"></canvas></div>
+          </div>
+          <div class="chart-wrap">
+            <div class="chart-title">Unique Destinations per Window</div>
+            <div class="graph-canvas"><canvas id="g-dests-chart"></canvas></div>
+          </div>
+          <div class="chart-wrap">
+            <div class="chart-title">Unique Ports per Window</div>
+            <div class="graph-canvas"><canvas id="g-ports-chart"></canvas></div>
+          </div>
+          <div class="chart-wrap">
+            <div class="chart-title">Avg Packets / Bytes per Flow</div>
+            <div class="graph-canvas"><canvas id="g-avg-chart"></canvas></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Logs -->
+    <section data-section="logs">
+      <div class="page-header">
+        <div class="page-header-row">
+          <div>
+            <h1>Logs</h1>
+            <p>Live tail of sentinel.log - last 200 lines</p>
+          </div>
+          <button class="btn" id="log-pin-btn">Pin scroll</button>
+        </div>
+      </div>
+      <div class="content">
+        <div class="log-box" id="log-box"></div>
+      </div>
+    </section>
+
+  </div>
+</div>
+<script src="/static/app.js"></script>
+</body>
+</html>
