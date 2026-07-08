@@ -10,7 +10,8 @@ A network intrusion detection system (NIDS) that watches live traffic, aggregate
 
 It includes a dashboard for reviewing alerts and inspecting traffic.
 
-
+![Dashboard overview page](assets/overview.png)
+<small>Overview page of the dashboard. Note that some information is censored</small>
 
 ## How it works
 
@@ -99,11 +100,39 @@ Open `http://127.0.0.1:5000` (or whatever `dashboard.host`/`dashboard.port` are 
 
 ## Dashboard tour
 
-- **Overview** — headline stats, packets-per-window sparkline, top talkers
-- **System Status** — model/config info, live threshold editor, score range, backend health strip
-- **Alerts** — score-over-time chart, score distribution histogram, filterable/exportable alert table with per-alert feature attribution, traffic breakdown, ack/label controls
-- **Monitor** — paginated, filterable, exportable raw window history
-- **Logs** — live tail of `logs/sentinel.log`
+<details><summary><strong>Overview</strong> - headline stats, packets-per-window sparkline, top talkers</summary>
+
+![Image](assets/overview.png)
+<small>Note: some information is censored</small>
+</details>
+
+<details><summary><strong>System Status</strong> - model/config info, live threshold editor, score range, backend health strip</summary>
+
+![Image](assets/systemstatus.png)
+</details>
+
+<details><summary><strong>Alerts</strong> - score over time chart, score distribution histogram, filterable/exportable alert table with per-alert feature attribution, traffic breakdown, ack/label controls</summary>
+
+![Image](assets/alerts1.png)
+![Image](assets/alerts2.png)
+<small>Note: some information is censored</small>
+</details>
+
+<details><summary><strong>Monitor</strong> - paginated, filterable, exportable raw window history</summary>
+
+![Image](assets/monitor.png)
+</details>
+
+<details><summary><strong>Logs</strong> - live tail of <code>logs/sentinel.log</code></summary>
+
+![Image](assets/logs.png)
+</details>
+
+<details><summary><strong>Graphs</strong> - historical traffic metrics: bytes, flows, destinations, ports, and averages per window</summary>
+
+![Image](assets/graphs1.png)
+![Image](assets/graphs2.png)
+</details>
 
 ## Project structure
 

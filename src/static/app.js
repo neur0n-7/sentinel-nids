@@ -237,12 +237,13 @@ function refreshBanner(backend, latestAlerts, captureStale) {
     return;
   }
 
-  
+  /*
   if (captureStale) {
     banner.className = 'banner paused';
     msg.textContent  = 'Backend running but capture appears paused (no new windows recently)';
     return;
   }
+  */
 
   banner.className = 'banner ok';
   msg.textContent  = 'Monitoring active';
@@ -955,7 +956,7 @@ async function loadMonitorPage() {
           <td>${fmtNum(r.avg_bytes_per_flow)}</td>
           <td>${r.unique_destinations}</td>
           <td>${r.unique_ports}</td>
-          <td><span class="score">${r.score != null ? fmtScore(r.score) : '—'}</span></td>
+          <td><span class="score">${r.score != null ? fmtScore(r.score) : '-'}</span></td>
         </tr>`).join('')
     : '<tr><td class="empty" colspan="9">No monitor data yet</td></tr>';
 
