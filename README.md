@@ -11,7 +11,7 @@ A network intrusion detection system (NIDS) that watches live traffic, aggregate
 It includes a dashboard for reviewing alerts and inspecting traffic.
 
 ![Dashboard overview page](assets/overview.png)
-<small>Overview page of the dashboard. Note that some information is censored</small>
+<sub>Overview page of the dashboard. Note that some information is censored</sub>
 
 ## How it works
 
@@ -103,7 +103,7 @@ Open `http://127.0.0.1:5000` (or whatever `dashboard.host`/`dashboard.port` are 
 <details><summary><strong>Overview</strong> - headline stats, packets-per-window sparkline, top talkers</summary>
 
 ![Image](assets/overview.png)
-<small>Note: some information is censored</small>
+<sub>Note: some information is censored</sub>
 </details>
 
 <details><summary><strong>System Status</strong> - model/config info, live threshold editor, score range, backend health strip</summary>
@@ -115,7 +115,7 @@ Open `http://127.0.0.1:5000` (or whatever `dashboard.host`/`dashboard.port` are 
 
 ![Image](assets/alerts1.png)
 ![Image](assets/alerts2.png)
-<small>Note: some information is censored</small>
+<sub>Note: some information is censored</sub>
 </details>
 
 <details><summary><strong>Monitor</strong> - paginated, filterable, exportable raw window history</summary>
