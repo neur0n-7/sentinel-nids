@@ -1,3 +1,10 @@
+
+# This is an EXAMPLE config file for Sentinel, and Sentinel does not read
+# this file to read config parameters. To use Sentinel, you must make a copy
+# of this file, named config.yml, placed in the same folder as this file.
+# All of the configurations you want to modify should be made in config.yml,
+# not in this file.
+
 dashboard:
   host: 127.0.0.1
   port: 5000
